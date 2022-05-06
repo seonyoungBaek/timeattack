@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous">
+    </script>
+</head>
+
+<style>
+    .box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid gray;
+        margin:auto;
+        width: 200px;
+    }
+
+</style>
+<body>
+<div class="box">
+       <input type="text" id="email" class="form-control" placeholder="아이디">
+       <input type="text" id="pwd" class="form-control" placeholder="성명">
+       <button type="button" onclick="join" id="btn_join" class="btn btn-primary">회원가입</button>
+       <button type="button" onclick="login" id="btn_login" class="btn btn-primary">로그인</button>
+</div>
+
+<script>
+            function join() {
+            let email = $('#email').val()
+            let pwd = $('#pwd').val()
+
+            $.ajax({
+                type: 'POST',
+                url: '/join',
+                data: { email_give:email,  pwd_give:pwd },
+                success: function (response) {
+                    window.location.reload()
+
+                }
+            });
+        }
+
+            function login() {
+                $.ajax({
+                    type: "POST",
+                    url: "/login",
+                    data: {email_give: $('#email').val(), pwd_give: $('#pwd').val()},
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            $.cookie('mytoken', response['token']);
+                            window.location.href = '/myboard'
+                        } else {
+                            alert(response['msg'])
+                        }
+                    }
+                })
+            }
+
+
+</script>
+</body>
+</html>
